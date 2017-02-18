@@ -1,7 +1,6 @@
 #!/bin/zsh
 
-export TmuxSessionName='TestSession'
-source "${0:a:h}/.tmux-helpers.sh"
+source "${0:a:h}/.common.sh"
 
 function initiate-tmux() {
   # Initiate with TmuxSessionName

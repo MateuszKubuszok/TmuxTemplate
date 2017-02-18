@@ -1,11 +1,11 @@
 # Define following variables/functions:
 # - $TmuxSessionName - name of created session
 # - $TmuxScriptDir - base directory for new windows/panes, current dir by default
-# - $TmuxCommons - file to source inside $TmuxScriptDir, this file by default
+# - $TmuxCommons - file to source inside $TmuxScriptDir, .common.sh by default
 
 CurrentDir="${0:a:h}"
 TmuxScriptDir=${TmuxScriptDir:-"$CurrentDir"}
-TmuxCommons=${TmuxCommons:-'.tmux-helpers.sh'}
+TmuxCommons=${TmuxCommons:-"$TmuxScriptDir/.common.sh"}
 
 alias \
     is-initiated="tmux has-session -t '$TmuxSessionName' &> /dev/null" \
@@ -33,7 +33,7 @@ function setup-window() {
 function setup-active-pane() {
   send-to $1 \
       "export TmuxSessionName='$TmuxSessionName'" Enter \
-      "source '$TmuxScriptDir/$TmuxCommons'" Enter \
+      "source '$TmuxCommons'" Enter \
       '/usr/bin/clear' Enter \
   ;
 }
@@ -67,12 +67,12 @@ rename-window $TmuxSessionName:no new-name        - renames window to new-name
 select-pane $TmuxSessionName:no -L/-R             - selects left/right pane
 setup-active-pane $TmuxSessionName:no             - applies some setup to active pane
 
-set-option $TmuxSessionName:no                    - set opetion 
+set-option $TmuxSessionName:no                    - set option 
 send-to $TmuxSessionName:no command1 command2...  - sens commands to window no
 splitwh $TmuxSessionName:no                       - splits horizontally window no
 
 splitwh-setup $TmuxSessionName:no subdir left-pane-command right-pane-command
                                                   - splits window, sets it up and sends initial commands to panes
 new-window-splitwh-setup $TmuxSessionName:no subdir window-name left-pane-command right-pane-command
-                                                  - creates new window, splits it, sets it up and initialiazes panes with commands
+                                                  - creates new window, splits it, sets it up and initializes panes with commands
 '"
