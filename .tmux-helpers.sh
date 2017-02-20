@@ -1,15 +1,14 @@
 # Define following variables/functions:
 # - $TmuxSessionName - name of created session
-# - $TmuxScriptDir - base directory for new windows/panes, current dir by default
-# - $TmuxCommons - file to source inside $TmuxScriptDir, .common.sh by default
+# - $TmuxInitDir - base directory for new windows/panes, current dir by default
+# - $TmuxCommons - file to source in startup, common.sh by default
 
-CurrentDir="${0:a:h}"
-TmuxScriptDir=${TmuxScriptDir:-"$CurrentDir"}
-TmuxCommons=${TmuxCommons:-"$TmuxScriptDir/.common.sh"}
+TmuxInitDir=${TmuxInitDir:-"${0:a:h}"}
+TmuxCommons=${TmuxCommons:-"${0:a:h}/.common.sh"}
 
 alias \
     is-initiated="tmux has-session -t '$TmuxSessionName' &> /dev/null" \
-    new-session="tmux new -s '$TmuxSessionName' -c '$TmuxScriptDir' -n '$TmuxSessionName' -d" \
+    new-session="tmux new -s '$TmuxSessionName' -c '$TmuxInitDir' -n '$TmuxSessionName' -d" \
     kill-session="tmux kill-session -t '$TmuxSessionName'" \
     attach-tmux="tmux attach -t '$TmuxSessionName'" \
     detach-tmux="tmux detach" \
@@ -22,7 +21,7 @@ alias \
 ;
 
 function new-window() {
-  tmux neww -t $1 -c "$TmuxScriptDir/$2" -n $3;
+  tmux neww -t $1 -c "$TmuxInitDir/$2" -n $3;
   setup-window $1;
 }
 
@@ -41,7 +40,7 @@ function setup-active-pane() {
 function splitwh-setup() {
     setup-active-pane $1;
     send-to $1 $3;
-  splitwh $1 -c "$TmuxScriptDir/$2";
+  splitwh $1 -c "$TmuxInitDir/$2";
     setup-active-pane $1;
     send-to $1 $4;
 }
